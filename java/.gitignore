@@ -1,0 +1,15 @@
+*~
+.DS_Store
+*.bc
+/.project
+/.settings/
+/.vscode/
+/bin/
+/pkg/
+/.idea/
+/run/
+/build/
+/target/
+
+assets.go
+/_build/
