@@ -7,7 +7,6 @@ Editor-signed tokens are described in the [documentation](https://github.com/elu
 
 ## Dependencies
 
-The project uses Maven for dependencies and compilation.
 
 ```
   <dependencies>

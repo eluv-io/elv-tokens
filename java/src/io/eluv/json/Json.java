@@ -15,8 +15,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 /**
- * Json
- * <P>
+ * Json serialization utility with jackson.
  *
  */
 
@@ -29,13 +28,7 @@ public class Json {
     }
     
     public Json(
-        boolean failOnUnknownProperties,
-        boolean serializeNull) {
-        this(failOnUnknownProperties, serializeNull, false);
-    }
-
-    public Json(
-        boolean failOnUnknownProperties,
+        boolean failOnUnknown,
         boolean serializeNull,
         boolean indent) {
 
@@ -44,16 +37,12 @@ public class Json {
 
         mapper.configure(
             DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-            failOnUnknownProperties);
+            failOnUnknown);
         mapper.setSerializationInclusion(serializeNull
             ? Include.ALWAYS : Include.NON_NULL);
 
         mapper.configure(SerializationFeature.INDENT_OUTPUT, indent);
 
-    }
-
-    public byte[] serialize(Object obj) throws JsonProcessingException {
-        return mapper.writeValueAsBytes(obj);
     }
 
     public <T> T deserialize(byte[] json, Class<T> aClass)
@@ -66,6 +55,10 @@ public class Json {
         return mapper.readValue(json, aClass);
     }
 
+    public byte[] serialize(Object obj) throws JsonProcessingException {
+        return mapper.writeValueAsBytes(obj);
+    }
+    
     public ObjectMapper getMapper() {
         return mapper;
     }

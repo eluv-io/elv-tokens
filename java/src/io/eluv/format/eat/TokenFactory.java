@@ -50,8 +50,10 @@ public class TokenFactory {
             mToken = new Token(TokenType.EDITOR_SIGNED, format);
             mToken.mTokenData.Grant = "read";
             long now = System.currentTimeMillis();
+            // UTC
             mToken.mTokenData.IssuedAt = now;
-            mToken.mTokenData.Expires = now + (HOUR * 4);
+            // allow 4 hours validity - note: fabric cap is 24 hours
+            mToken.mTokenData.Expires = now + (HOUR * 4); 
 
             try {
                 // validate IDs

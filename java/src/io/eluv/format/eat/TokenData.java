@@ -31,9 +31,9 @@ public class TokenData {
     @JsonProperty("gra")
     public String    Grant;            // type of grant
     @JsonProperty("iat")
-    public long      IssuedAt;         // Issued At
+    public long      IssuedAt;         // Issued At (millis - UTC)
     @JsonProperty("exp")
-    public long      Expires;          // Expiration Time
+    public long      Expires;          // Expiration Time (millis - UTC)
     @JsonProperty("ctx")
     public HashMap<String,Object> Ctx; // additional, arbitrary information conveyed in the token
     
