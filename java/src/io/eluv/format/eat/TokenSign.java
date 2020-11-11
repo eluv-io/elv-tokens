@@ -1,5 +1,9 @@
 package io.eluv.format.eat;
 
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+
+import io.eluv.json.Json;
 
 public class TokenSign {
 
@@ -18,8 +22,8 @@ public class TokenSign {
     
     private static void usage() {
         print("usage:");
-        print("TokenSign private_key spaceId libraryId contentId [delegationId]");
-        print("  create an editor-signed token valid for 4 hours");
+        print("TokenSign private_key spaceId libraryId contentId [delegationId] [json context]");
+        print("  create an editor-signed token valid for 24 hours");
     }
     
 
@@ -35,14 +39,29 @@ public class TokenSign {
             args[3],
             true)
             //.withAFGHPublicKey("my_afgh")
-            .withExpiresIn(TokenFactory.HOUR * 4);
+            .withExpiresIn(TokenFactory.HOUR * 24);
         
         if (args.length > minArgs) {
-            es.withDelegationId(args[4]);
+            es.withDelegationId(args[minArgs]);
         }
+        if (args.length > minArgs+1) {
+            Json json = new Json();
+            @SuppressWarnings("unchecked")
+            HashMap<String,Object> ctx = json.deserialize(args[minArgs+1], HashMap.class);
+            es.withContext(ctx);
+        } 
         
         String stok = es.signEncode(args[0]);
-        print(stok);      
+        print("");
+        print("bearer");
+        print("-----");
+        print(stok);    
+        print("");
+        print("token");
+        print("-----");
+        Json json = new Json(false, false, true);
+        print(new String(json.serialize(es.mToken.mTokenData), StandardCharsets.UTF_8));
+        
     }
    
 }
