@@ -12,10 +12,10 @@ See also the [documentation](https://github.com/eluv-io/elv-docs):
 
 **Policies**
 
-* [Policy Overview](auth/policy/policy-auth.md)
-* [Policy YAML Reference](auth/policy/policy-language-reference.yaml)
+* [Policy Overview](https://github.com/eluv-io/elv-docs/blob/main/auth/policy/policy-auth.md)
+* [Policy YAML Reference](https://github.com/eluv-io/elv-docs/blob/main/auth/policy/policy-language-reference.yaml)
 
 **Tokens**
 
-* [Self-Signed Tokens](auth/self_signed_tokens.md)
-* [Self-Signed Tokens Example Policy](auth/self_signed_policy.yaml)
+* [Self-Signed Tokens](https://github.com/eluv-io/elv-docs/blob/main/auth/self_signed_tokens.md)
+* [Self-Signed Tokens Example Policy](https://github.com/eluv-io/elv-docs/blob/main/auth/self_signed_policy.yaml)
