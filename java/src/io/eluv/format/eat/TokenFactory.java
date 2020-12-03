@@ -7,7 +7,8 @@ import org.bouncycastle.util.encoders.Hex;
 import org.web3j.crypto.ECKeyPair;
 
 import io.eluv.constants.Constants;
-import io.eluv.crypto.Crypto;
+import io.eluv.crypto.KeyFactory;
+import io.eluv.crypto.Signer;
 import io.eluv.format.id.Id;
 
 
@@ -53,8 +54,8 @@ public class TokenFactory {
             // UTC
             mToken.mTokenData.IssuedAt = now;
             // allow 4 hours validity - note: fabric cap is 24 hours
-            mToken.mTokenData.Expires = now + (HOUR * 4); 
-
+            mToken.mTokenData.Expires = now + (HOUR * 4);
+            
             try {
                 // validate IDs
                 new Id(sid).assertCode(Id.Code.QSpace);
@@ -127,7 +128,7 @@ public class TokenFactory {
          */
         public String signEncode(String hexEncodedPk) throws TokenException {
             try {
-                return this.signEncode(Crypto.KeyPairFrom(hexEncodedPk));
+                return this.signEncode(KeyFactory.createSigner(hexEncodedPk));
             } catch (TokenException e) {
                 throw e;
             } catch (Exception e) {
@@ -138,14 +139,35 @@ public class TokenFactory {
         /**
          * Signs and encodes the token.
          * 
-         * @param sk the SECP-256k1 key to sign the token
+         * @param sk the SECP-256k1 key pair to sign the token
          * @return a 'bearer' string authorization
          * @throws TokenException
          */
         public String signEncode(ECKeyPair sk) throws TokenException {
+            return this.signEncode(new Signer.KeyPairSigner(sk));
+        }
+        
+        /**
+         * Signs and encodes the token.
+         * 
+         * @param sk the SECP-256k1 key pair to sign the token
+         * @return a 'bearer' string authorization
+         * @throws TokenException
+         */
+        public String signEncode(Signer sk) throws TokenException {
             try {
-                mToken.mTokenData.Subject = "0x" + Hex.toHexString(Crypto.pubkeyToAddress(sk));
-                mToken.signWith(sk);
+                mToken.mTokenData.Subject = "0x" + Hex.toHexString(sk.getAddress());
+                mToken.sign(sk);
+                return mToken.Encode();
+            } catch (TokenException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new TokenException("", e);
+            }
+        }
+        
+        String encode() throws TokenException {
+            try {
                 return mToken.Encode();
             } catch (TokenException e) {
                 throw e;

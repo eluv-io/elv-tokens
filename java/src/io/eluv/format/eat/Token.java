@@ -3,12 +3,10 @@ package io.eluv.format.eat;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.Sign;
-import org.web3j.crypto.Sign.SignatureData;
 
 import io.eluv.crypto.Crypto;
 import io.eluv.crypto.SignException;
+import io.eluv.crypto.Signer;
 import io.eluv.flate.Flate;
 import io.eluv.format.base58.Base58;
 import io.eluv.json.Json;
@@ -79,7 +77,7 @@ public class Token {
         case ES256K:
             if (mSignature == null || mSignature.length == 0 
                 || mTokenBytes == null || mTokenBytes.length == 0) {
-                throw new TokenException("Missign signature or data bytes");
+                throw new TokenException("Missing signature or data bytes");
             }
         }
     }
@@ -159,29 +157,19 @@ public class Token {
         return encodePrefix() + Base58.encode(data);
     }
     
-    // SignWith signs this token with the given private key.
-    public void signWith(ECKeyPair clientSK) throws TokenException {
-        Crypto.Signer signFunc = new Crypto.Signer(){
-            public SignatureData sign(byte[] digestHash) throws SignException {
-                return Sign.signMessage(digestHash, clientSK, false);
-            }
-        };
-        signWith(Crypto.pubkeyToAddress(clientSK), signFunc);
-    }
+    //sign signs this token using the provided signer.
+    void sign(Signer signer) throws TokenException {
 
-    //SignWith signs this token using the provided signing function.
-    void signWith(
-        byte[] signAddr,
-        Crypto.Signer signer) throws TokenException {
-
-        mTokenData.EthAddr = signAddr;
+        mTokenData.EthAddr = signer.getAddress();
         mTokenBytes = encodeBytes();
+        
         try {
             mSignature = Crypto.sign(mTokenBytes, signer);
             mSigType = TokenSigType.ES256K;
         } catch (SignException ex) {
             throw new TokenException("", ex);
         }
+
     }
     
 

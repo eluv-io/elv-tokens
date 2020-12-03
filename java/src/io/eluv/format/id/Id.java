@@ -154,7 +154,7 @@ public class Id {
         
         Builder(String s) throws IllegalArgumentException {
             if (s == null || s.length() < PrefixLen) {
-                throw new IllegalArgumentException("invalid prefix ID");
+                throw new IllegalArgumentException("invalid prefix ID in [" + s + "]");
             }
             Code pref = Code.FromString(s.substring(0, PrefixLen));
             if (pref == Code.UNKNOWN) {

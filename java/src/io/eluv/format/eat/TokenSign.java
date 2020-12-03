@@ -37,7 +37,7 @@ public class TokenSign {
             args[1], 
             args[2], 
             args[3],
-            true)
+            false)
             //.withAFGHPublicKey("my_afgh")
             .withExpiresIn(TokenFactory.HOUR * 24);
         
