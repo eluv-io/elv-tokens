@@ -79,7 +79,7 @@ class TokenTest {
         tok.sign(new Signer.KeyPairSigner(sk));
         assertNotNull(tok.mTokenData.EthAddr);
         assertNotNull(tok.mSignature);
-        String ser = tok.Encode();
+        String ser = tok.encode();
         
         assertEquals(built, tok);
         System.out.println("testTokenEncode: " + ser);

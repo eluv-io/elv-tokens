@@ -1,45 +1,13 @@
 package io.eluv.format.eat;
 
-
 import java.util.HashMap;
 
-import org.junit.jupiter.api.Test;
-import org.web3j.crypto.ECKeyPair;
-
-import io.eluv.crypto.KeysTest;
-import io.eluv.crypto.PrivateKey;
 import io.eluv.crypto.Secp256k1;
 import io.eluv.crypto.Signer;
 import io.eluv.json.Json;
 
+public class TokenBench {
 
-
-class TokenBenchTest {
-
-    //@Test
-    void testTokenBenchKeyPair() throws Exception {
-        ECKeyPair sk = KeysTest.staticPrivateKey();
-        Signer pk = new Signer.KeyPairSigner(sk);
-        doTestTokenBenchTest("EcKeyPair", pk, 10000);
-        //duration: 10365 millis
-    }
-    
-    //@Test
-    void testTokenBenchPrivateKey() throws Exception {
-        PrivateKey pk = new PrivateKey(KeysTest.staticPrivateKey());
-        doTestTokenBenchTest("PrivateKey", pk, 10000);
-        //duration: 10393 millis
-    }
-    
-    @Test
-    void testTokenBenchNative() throws Exception {
-        Secp256k1 pk = new Secp256k1(KeysTest.STATIC_PK);
-        doTestTokenBenchTest("Secp256k1", pk, 10000);
-        //duration without any encoding:        2691 millis
-        //duration with base58 in cgo:          4404 millis
-        //duration:                             7102 millis
-    }
-    
     void doTestTokenBenchTest(String testName, Signer pk, int runCount) throws Exception {
         
         String sctx = "{\"foo\": \"bar\"}";
@@ -72,4 +40,14 @@ class TokenBenchTest {
         System.out.println("token: " + tok);
     }
 
+    
+    public static void main(String[] args) throws Exception {
+        TokenBench t = new TokenBench();
+        Secp256k1 pk = new Secp256k1("c205dfefd9885f368684ecdeb4e8079ba9d16350403c848da26f3106b83c18e6");
+        t.doTestTokenBenchTest("Secp256k1", pk, 10000);
+        
+        System.out.println();
+        Natives.printReport();        
+    }
+    
 }

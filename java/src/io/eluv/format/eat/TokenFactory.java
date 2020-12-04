@@ -158,7 +158,7 @@ public class TokenFactory {
             try {
                 mToken.mTokenData.Subject = "0x" + Hex.toHexString(sk.getAddress());
                 mToken.sign(sk);
-                return mToken.Encode();
+                return mToken.encode();
             } catch (TokenException e) {
                 throw e;
             } catch (Exception e) {
@@ -168,7 +168,7 @@ public class TokenFactory {
         
         String encode() throws TokenException {
             try {
-                return mToken.Encode();
+                return mToken.encode();
             } catch (TokenException e) {
                 throw e;
             } catch (Exception e) {

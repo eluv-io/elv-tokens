@@ -8,7 +8,7 @@ import io.eluv.crypto.Crypto;
 import io.eluv.crypto.SignException;
 import io.eluv.crypto.Signer;
 import io.eluv.flate.Flate;
-import io.eluv.format.base58.Base58;
+import io.eluv.format.base58.Base58Encoder;
 import io.eluv.json.Json;
 
 /**
@@ -150,11 +150,11 @@ public class Token {
         return data;        
     }
     
-    public String Encode() throws TokenException {
+    public String encode() throws TokenException {
         validate();
         
         byte[] data = encodeTokenAndSigBytes();
-        return encodePrefix() + Base58.encode(data);
+        return encodePrefix() + Base58Encoder.encode(data);
     }
     
     //sign signs this token using the provided signer.

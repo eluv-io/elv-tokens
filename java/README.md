@@ -95,9 +95,28 @@ curl http://127.0.0.1:8008/qlibs/ilib3FfPwGraXTRgoq2Xu4oC7eJgT5Tj/q/tqw_DFKqKsfj
 {"a":"b"}
 ```
 
-**Note** that tokens are signed via a native `secp256k1` implementation.
+### Native bindings
+
+**signing**
+
+Tokens are signed via a native `secp256k1` implementation.
  
 This behavior is controlled via the `native.secp256k1.disabled` system property. <br>
 When its value is 'true' the native implementation is disabled and thus pure java is used. 
 
-On the command line, use `java -Dnative.secp256k1.disabled=true -cp ...`.
+To disable the native bindings, on the command line, use `java -Dnative.secp256k1.disabled=true -cp ...`.
+
+**base58**
+
+A native implementation of base58 encoding is provided via a dynamic/shared library in the `resources` folder.
+
+Copy the appropriate library either: 
+* to one of the folders reported by the system property `java.library.path` or
+* to a specific location and pass the absolute path of the library via a system property `native.b58.library` 
+
+
+**Note:** running the class `io.eluv.format.eat.Natives` without arguments prints the availability status of the native libraries to the standard output.
+
+
+
+ 
