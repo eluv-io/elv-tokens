@@ -1,10 +1,8 @@
 package io.eluv.format.base58;
 
 
-import jnr.ffi.LibraryLoader;
 import jnr.ffi.Pointer;
 import jnr.ffi.annotations.IgnoreError;
-import jnr.ffi.provider.FFIProvider;
 
 
 public class NativeB58Encoder {
@@ -33,11 +31,30 @@ public class NativeB58Encoder {
      *   /usr/java/packages/lib/amd64
      *   /usr/lib64
      *   /lib64
-     *   /lib:/usr/lib  
+     *   /lib
+     *   /usr/lib  
      */
-    public static final String NATIVE_B58_LIBRARY_NAME_PROP = "native.b58.library";
-    public static final String NATIVE_B58_LIBRARY_NAME_DEF = "elvb58";
+    public static final String NATIVE_B58_LIBRARY_NAME_PROP   = "native.b58.library";
+    public static final String NATIVE_B58_LIBRARY_SIMPLE_NAME = "elvb58";
     public static final String NATIVE_B58_LIBRARY_NAME;
+
+    /** 
+     * Pass true to disable use of native library
+     */
+    public static final String NATIVE_B58_DISABLED_PROP = "native.b58.disabled";
+    public static final boolean NATIVE_B58_DISABLED;
+    
+    /** 
+     * Path to a temporary folder. 
+     * If not set the result of System.getProperty("java.io.tmpdir") is used.  
+     */
+    public static final String NATIVE_B58_TMP_DIR_PROP = "io.eluv.format.base58.tmpdir";
+    public static final String NATIVE_B58_TMP_DIR;
+    
+    public static final String NATIVE_B58_PREFIX = "elvb58-";
+    
+    /* for tests */
+    static boolean NATIVE_B58_DISABLE_SELF_EXTRACT = false;
     
     @IgnoreError
     public static interface nativeB58 {
@@ -51,18 +68,32 @@ public class NativeB58Encoder {
     static nativeB58 JNR_GO_LIB;
     static Throwable JNR_GO_LIB_LOAD_ERROR;
     static {
+        String p = System.getProperty(NATIVE_B58_DISABLED_PROP, "false");
+        NATIVE_B58_DISABLED = Boolean.valueOf(p);
+        
         NATIVE_B58_LIBRARY_NAME = System.getProperty(
-                NATIVE_B58_LIBRARY_NAME_PROP, 
-                NATIVE_B58_LIBRARY_NAME_DEF);
+            NATIVE_B58_LIBRARY_NAME_PROP, 
+            NATIVE_B58_LIBRARY_SIMPLE_NAME);
+        NATIVE_B58_TMP_DIR = System.getProperty(
+            NATIVE_B58_TMP_DIR_PROP, 
+            System.getProperty("java.io.tmpdir"));
+        
         loadNative(NATIVE_B58_LIBRARY_NAME);
     }
     
-    static void loadNative(String name) {
+    static synchronized void loadNative(String libName) {
+        JNR_GO_LIB_LOAD_ERROR = null;
+        if (NATIVE_B58_DISABLED) {
+            return; 
+        }
+        NativeB58Loader<nativeB58> loader = new NativeB58Loader<>(
+            NATIVE_B58_LIBRARY_SIMPLE_NAME,
+            libName,
+            NATIVE_B58_TMP_DIR, 
+            NATIVE_B58_PREFIX,
+            NATIVE_B58_DISABLE_SELF_EXTRACT);
         try {
-            JNR_GO_LIB_LOAD_ERROR = null;        
-            LibraryLoader<nativeB58> loader = FFIProvider.getSystemProvider().createLibraryLoader(nativeB58.class);
-            loader.failImmediately();
-            JNR_GO_LIB = loader.load(name);
+            JNR_GO_LIB = loader.load(nativeB58.class);
         } catch (Throwable t) {
             JNR_GO_LIB_LOAD_ERROR = t;        
         }

@@ -3,7 +3,6 @@ package io.eluv.format.eat;
 
 import java.util.HashMap;
 
-import org.bouncycastle.util.encoders.Hex;
 import org.web3j.crypto.ECKeyPair;
 
 import io.eluv.constants.Constants;
@@ -156,7 +155,7 @@ public class TokenFactory {
          */
         public String signEncode(Signer sk) throws TokenException {
             try {
-                mToken.mTokenData.Subject = "0x" + Hex.toHexString(sk.getAddress());
+                mToken.mTokenData.Subject = new Id(Id.Code.User,sk.getAddress()).toString();
                 mToken.sign(sk);
                 return mToken.encode();
             } catch (TokenException e) {

@@ -14,6 +14,7 @@ import io.eluv.constants.Constants;
 import io.eluv.crypto.Crypto;
 import io.eluv.crypto.KeysTest;
 import io.eluv.crypto.Signer;
+import io.eluv.format.id.Id;
 
 
 class TokenTest {
@@ -66,7 +67,7 @@ class TokenTest {
         Token tok = new Token(TokenType.EDITOR_SIGNED, TokenFormat.JSON_COMPRESSED);
         assertNotNull(tok.mTokenData);
         
-        tok.mTokenData.Subject = "0x" + Hex.toHexString(Crypto.pubkeyToAddress(sk));
+        tok.mTokenData.Subject = new Id(Id.Code.User,Crypto.pubkeyToAddress(sk)).toString();
         tok.mTokenData.Grant = "read";
         tok.mTokenData.SID = "ispc218Pn4tTNJELz8ASyV8o4KRggfoD";
         tok.mTokenData.LID = "ilib3FfPwGraXTRgoq2Xu4oC7eJgT5Tj";

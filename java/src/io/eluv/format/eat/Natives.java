@@ -14,15 +14,21 @@ public class Natives {
     
     static void printReport() {
         // general info
+        print("os-info: " + OSInfo.getNativeLibFolderPathForCurrentOS());
         print("java.library.path=" + System.getProperty("java.library.path"));
         print("");
         
         // b58 encoding
         print("== Native b58 library ==");
-        print("native.b58.library=" + NativeB58Encoder.NATIVE_B58_LIBRARY_NAME);
+        print(NativeB58Encoder.NATIVE_B58_DISABLED_PROP+"="+NativeB58Encoder.NATIVE_B58_DISABLED);
+        print(NativeB58Encoder.NATIVE_B58_LIBRARY_NAME_PROP+"=" + NativeB58Encoder.NATIVE_B58_LIBRARY_NAME);
         print("default library name: " + System.mapLibraryName(NativeB58Encoder.NATIVE_B58_LIBRARY_NAME));
+        print(NativeB58Encoder.NATIVE_B58_TMP_DIR_PROP+"="+NativeB58Encoder.NATIVE_B58_TMP_DIR);
+        
         if (NativeB58Encoder.hasLib()) {
             print("native library found.");
+        } else if (NativeB58Encoder.NATIVE_B58_DISABLED){
+            print("native library disabled.");
         } else {
             print("native library not found.");
             print("error: " + NativeB58Encoder.loadError());
@@ -32,12 +38,13 @@ public class Natives {
         // secp256k1
         print("== secp256k1 ==");
         print(KeyFactory.NATIVE_SECP256K1_DISABLED_PROP+"="+KeyFactory.NATIVE_SECP256K1_DISABLED);
-        print("secp256k1 available: " + Secp256k1Context.isEnabled());
+        if (!KeyFactory.NATIVE_SECP256K1_DISABLED) {
+            print("secp256k1 available: " + Secp256k1Context.isEnabled());
+        }
         
         print("fr.acinq.secp256k1.tmpdir=" + System.getProperty("fr.acinq.secp256k1.tmpdir"));
         print("fr.acinq.secp256k1.lib.path=" + System.getProperty("fr.acinq.secp256k1.lib.path"));
         print("fr.acinq.secp256k1.lib.name=" + System.getProperty("fr.acinq.secp256k1.lib.name"));
-        print("os-info: " + OSInfo.getNativeLibFolderPathForCurrentOS());
         print("default library name: " + System.mapLibraryName("secp256k1"));
     }
     

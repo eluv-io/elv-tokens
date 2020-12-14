@@ -2,8 +2,8 @@ package io.eluv.crypto;
 
 public class KeyFactory {
     
-    public static String NATIVE_SECP256K1_DISABLED_PROP = "native.secp256k1.disabled";
-    public static boolean NATIVE_SECP256K1_DISABLED;
+    public static final String NATIVE_SECP256K1_DISABLED_PROP = "native.secp256k1.disabled";
+    public static final boolean NATIVE_SECP256K1_DISABLED;
     
     static {
         String p = System.getProperty(NATIVE_SECP256K1_DISABLED_PROP, "false");
