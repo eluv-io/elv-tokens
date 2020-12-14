@@ -48,6 +48,19 @@ Editor-signed tokens are described in the [documentation](https://github.com/elu
   </dependencies>
 ```
 
+### Build
+
+Using Maven build with:
+
+```
+mvn package
+```
+
+After the build finished:
+* the `elv-tokens-xx.jar` jar is in the `target` folder
+* libraries of dependencies are in the `target/libs` folder
+
+
 ## Usage and Example
 
 A quick code example is shown below:
@@ -70,18 +83,6 @@ A quick code example is shown below:
     System.out.println(es.signEncode(privateKeyHex));
 
 ```
-
-#### Build
-
-Using Maven build with:
-
-```
-mvn package
-```
-
-After the build finished:
-* the `elv-tokens-xx.jar` jar is in the `target` folder
-* libraries of dependencies are in the `target/libs` folder
 
 #### Sample Code
 
