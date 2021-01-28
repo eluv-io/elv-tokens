@@ -22,7 +22,7 @@ public class TokenSign {
     
     private static void usage() {
         print("usage:");
-        print("TokenSign private_key spaceId libraryId contentId [delegationId] [json context]");
+        print("TokenSign private_key spaceId libraryId contentId [delegationId] [json context] [subject]");
         print("  create an editor-signed token valid for 24 hours");
     }
     
@@ -49,6 +49,9 @@ public class TokenSign {
             @SuppressWarnings("unchecked")
             HashMap<String,Object> ctx = json.deserialize(args[minArgs+1], HashMap.class);
             es.withContext(ctx);
+        } 
+        if (args.length > minArgs+2) {
+            es.withSubject(args[minArgs+2]);
         } 
         
         String stok = es.signEncode(args[0]);

@@ -119,6 +119,20 @@ public class TokenFactory {
         }
 
         /**
+         * Set the subject of this token.  
+         * <p>
+         * When signing - if no subject was set - the subject is taken from the
+         * address of the signer.
+         * 
+         * @param subject the subject
+         * @return this EditorSigned
+         */
+        public EditorSigned withSubject(String subject) {
+            mToken.mTokenData.Subject = subject;
+            return this;
+        }
+
+        /**
          * Signs and encodes the token.
          * 
          * @param hexEncodedPk an hex encoded SECP-256k1 key to sign the token
@@ -155,7 +169,10 @@ public class TokenFactory {
          */
         public String signEncode(Signer sk) throws TokenException {
             try {
-                mToken.mTokenData.Subject = new Id(Id.Code.User,sk.getAddress()).toString();
+                if (mToken.mTokenData.Subject == null || 
+                    mToken.mTokenData.Subject.length() == 0) {
+                    mToken.mTokenData.Subject = new Id(Id.Code.User,sk.getAddress()).toString();
+                }
                 mToken.sign(sk);
                 return mToken.encode();
             } catch (TokenException e) {
